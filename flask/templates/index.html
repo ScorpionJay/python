@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="never">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>video</title>
+    <style>
+        body {
+            margin: 0
+        }
+
+        .video {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <h1>{{ contents }}</h1> -->
+    <div id="container"> </div>
+</body>
+<script>
+    function successCallback(data) { return data }
+    fetch('/video')
+        .then(data => successCallback(data))
+        .then(data => data.json())
+        .then(data => {
+            console.log(data)
+            let html = ''
+            data = [{ ...data[0] }]
+            // <div>${element.nickname}</div>
+            //                 <div>${element.desc}</div>
+            //                 <img src='${element.avatar}' />
+            //                 <img src='${element.video_img}' />
+            data.forEach(element => {
+                html += `<div>
+                            <video rel="nofollow" controls autoplay="autoplay" loop="loop" src='${element.video_url}'  class='video'/>
+                        </div>`
+            });
+            document.getElementById('container').innerHTML = html
+        })
+
+</script>
+
+</html>
