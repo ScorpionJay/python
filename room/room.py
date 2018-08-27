@@ -4,8 +4,12 @@
 import urllib.request as request
 from bs4 import BeautifulSoup
 
+# qk
 
-def get_data(url):
+
+def get_qk(url):
+    # url = 'https://www.qk365.com/list/p'+str(i)
+    url = 'https://www.qk365.com/list/a14-p' + str(i)
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)'}
     req = request.Request(url, headers=headers)
@@ -21,10 +25,32 @@ def get_data(url):
         with open('room.txt', 'a') as file:
             file.write(title+'|'+price + '\n')
 
+# beike
 
-for i in range(1, 68):
-    print('page ' + str(i))
-    # all
-    # url = 'https://www.xxx.com/list/p'+str(i)
-    url = 'https://www.xxx.com/list/a14-p' + str(i)
-    get_data(url)
+
+def get_bk(i):
+    url = 'https://sh.zu.ke.com/zufang/pg'+str(i)
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)'}
+    req = request.Request(url, headers=headers)
+    response = request.urlopen(req).read().decode('utf-8')
+
+    soup = BeautifulSoup(response, 'html.parser')
+
+    list = soup.select('.content__list .content__list--item')
+    for item in list:
+        title = item.select('.content__list--item--title a')[0].text
+        price = item.select('.content__list--item-price em')[0].text
+        print('%s|%s' % (title, price))
+        with open('room.txt', 'a') as file:
+            file.write(title+'|'+price + '\n')
+
+
+def main():
+    for i in range(1, 100):
+        print('page ' + str(i))
+        get_bk(i)
+
+
+if __name__ == '__main__':
+    main()
