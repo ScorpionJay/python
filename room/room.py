@@ -1,13 +1,15 @@
 # @description  room
 # @date         2018-8-27
 
+import re
 import urllib.request as request
+
 from bs4 import BeautifulSoup
 
 # qk
 
 
-def get_qk(url):
+def get_qk(i):
     # url = 'https://www.qk365.com/list/p'+str(i)
     url = 'https://www.qk365.com/list/a14-p' + str(i)
     headers = {
@@ -20,10 +22,11 @@ def get_qk(url):
     list = soup.select('.easyList li')
     for item in list:
         title = item.select('.easySub')[0].text
+        area = re.match('【(.*?)】',title).group(1).strip().replace('新区','').replace('区','')
         price = item.select('em b')[0].text
-        print('%s|%s' % (title, price))
+        print('%s|%s|%s' % (area,title, price))
         with open('room.txt', 'a') as file:
-            file.write(title+'|'+price + '\n')
+            file.write(area+'|'+title+'|'+price + '\n')
 
 # beike
 
@@ -47,9 +50,12 @@ def get_bk(i):
 
 
 def main():
+    get_qk(1000)
+    return
     for i in range(1, 100):
         print('page ' + str(i))
-        get_bk(i)
+        # get_bk(i)
+        get_qk(i)
 
 
 if __name__ == '__main__':
